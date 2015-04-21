@@ -59,7 +59,7 @@
     <url>https://github.com/revelc/zookeeper-maven-plugin/issues</url>
   </issueManagement>
   <distributionManagement>
-    <!-- https://issues.sonatype.org/browse/OSSRH-???? -->
+    <!-- https://issues.sonatype.org/browse/OSSRH-15142 -->
     <repository>
       <id>oss.releases.https</id>
       <name>Sonatype Release Distribution Staging Repository</name>
