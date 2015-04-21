@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="Date-Revision-yyyymmdd" content="20150421" />
     <meta http-equiv="Content-Language" content="en" />
-    <title>ZooKeeper Maven Plugin &#x2013; About</title>
+    <title>ZooKeeper Maven Plugin &#x2013; Description</title>
     <link rel="stylesheet" href="./css/apache-maven-fluido-1.3.1.min.css" />
     <link rel="stylesheet" href="./css/site.css" />
     <link rel="stylesheet" href="./css/print.css" media="print" />
@@ -17,7 +17,13 @@
       
     <script type="text/javascript" src="./js/apache-maven-fluido-1.3.1.min.js"></script>
 
-    
+                          
+        
+<script type="text/javascript">$(document).ready(function () {
+          $("div.source pre").addClass("prettyprint");
+          prettyPrint();
+        });</script>
+          
                   </head>
         <body class="topBarDisabled">
           
@@ -228,9 +234,77 @@
                 
         <div id="bodyColumn"  class="span9" >
                                   
-            <div class="section">
-<h2><a name="About_ZooKeeper_Maven_Plugin"></a>About ZooKeeper Maven Plugin</h2><a name="About_ZooKeeper_Maven_Plugin"></a>
-<p>A Maven plugin for launching a ZooKeeper server for integration testing</p></div>
+            <!-- Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. --><div class="section">
+<h2><a name="Description"></a>Description</h2>
+<p>This <tt>zookeeper-maven-plugin</tt> enables integration testing for applications  utilizing ZooKeeper servers. It will enable you to start a ZooKeeper server  prior to running integration tests, and then enable you to shut it down  gracefully. This plugin was inspired by the <a class="externalLink" href="http://eclipse.org/jetty/documentation/current/jetty-maven-plugin.html">jetty-maven-plugin</a> and  behaves similarly, using a <tt>shutdownString</tt> and <tt>shutdownPort</tt> to shut down a  specific instance during different phases of a <a class="externalLink" href="https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html">Maven build lifecycle</a>.</p>
+<p>Configuration options are available for many of ZooKeeper&#x2019;s own configuration  options. It uses the <tt>${project.build.directory}/zmp</tt> to store its running  state, including the ZooKeeper <tt>dataDir</tt>. Multiple concurrent executions are  possible, but must each must specify a unique <tt>clientPort</tt> and <tt>shutdownPort</tt>  option.</p></div>
+<div class="section">
+<h2><a name="Getting_Started"></a>Getting Started</h2>
+<p>To add this plugin to your project, configure the plugin similarly to:</p>
+
+<div class="source">
+<div class="source">
+<pre>  &lt;build&gt;
+    &lt;plugins&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;net.revelc.code&lt;/groupId&gt;
+        &lt;artifactId&gt;zookeeper-maven-plugin&lt;/artifactId&gt;
+        &lt;version&gt;1.0.0-SNAPSHOT&lt;/version&gt;
+        &lt;configuration&gt;
+          &lt;!-- This is a unique string to kill the service when finished --&gt;
+          &lt;shutdownString&gt;UniqueShutDownString&lt;/shutdownString&gt;
+          &lt;!-- This is the port the plugin listens on for the shutdownString --&gt;
+          &lt;shutdownPort&gt;21122&lt;/shutdownPort&gt;
+          &lt;!-- Configure the ZooKeeper port; defaults to listening on 127.0.0.1 --&gt;
+          &lt;clientPort&gt;21123&lt;/clientPort&gt;
+        &lt;/configuration&gt;
+        &lt;executions&gt;
+          &lt;execution&gt;
+            &lt;!-- In this example, only one ZooKeeper service is started and the
+            two goals share the same configuration, so the stop goal sends the
+            same shutdown message that the start goal is listening for --&gt;
+            &lt;id&gt;run-zookeeper&lt;/id&gt;
+            &lt;goals&gt;
+              &lt;goal&gt;start&lt;/goal&gt;&lt;!-- runs at pre-integration-test phase --&gt;
+              &lt;goal&gt;stop&lt;/goal&gt;&lt;!-- runs at post-integration-test phase --&gt;
+            &lt;/goals&gt;
+          &lt;/execution&gt;
+        &lt;/executions&gt;
+      &lt;/plugin&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+        &lt;artifactId&gt;maven-failsafe-plugin&lt;/artifactId&gt;
+        &lt;version&gt;2.17&lt;/version&gt;
+        &lt;executions&gt;
+          &lt;execution&gt;
+            &lt;!-- configure failsafe to execute some ITs which use ZooKeeper --&gt;
+            &lt;id&gt;run-integration-tests&lt;/id&gt;
+            &lt;goals&gt;
+              &lt;goal&gt;integration-test&lt;/goal&gt;
+              &lt;goal&gt;verify&lt;/goal&gt;
+            &lt;/goals&gt;
+          &lt;/execution&gt;
+        &lt;/executions&gt;
+      &lt;/plugin&gt;
+    &lt;/plugins&gt;
+  &lt;/build&gt;
+</pre></div></div>
+<p>and build your project, similarly to (it runs at the verify phase by default):</p>
+
+<div class="source">
+<div class="source">
+<pre>mvn verify
+</pre></div></div></div>
                   </div>
             </div>
           </div>
