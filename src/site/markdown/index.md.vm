@@ -1,0 +1,92 @@
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+#set ($d = "$")
+
+Description
+-----------
+
+  This `zookeeper-maven-plugin` enables integration testing for applications
+  utilizing ZooKeeper servers. It will enable you to start a ZooKeeper server
+  prior to running integration tests, and then enable you to shut it down
+  gracefully. This plugin was inspired by the [jetty-maven-plugin][2] and
+  behaves similarly, using a `shutdownString` and `shutdownPort` to shut down a
+  specific instance during different phases of a [Maven build lifecycle][1].
+
+  Configuration options are available for many of ZooKeeper's own configuration
+  options. It uses the `${d}{project.build.directory}/zmp` to store its running
+  state, including the ZooKeeper `dataDir`. Multiple concurrent executions are
+  possible, but must each must specify a unique `clientPort` and `shutdownPort`
+  option.
+
+Getting Started
+---------------
+
+  To add this plugin to your project, configure the plugin similarly to:
+
+```xml
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>${project.artifactId}</artifactId>
+        <version>${project.version}</version>
+        <configuration>
+          <!-- This is a unique string to kill the service when finished -->
+          <shutdownString>UniqueShutDownString</shutdownString>
+          <!-- This is the port the plugin listens on for the shutdownString -->
+          <shutdownPort>21122</shutdownPort>
+          <!-- Configure the ZooKeeper port; defaults to listening on 127.0.0.1 -->
+          <clientPort>21123</clientPort>
+        </configuration>
+        <executions>
+          <execution>
+            <!-- In this example, only one ZooKeeper service is started and the
+            two goals share the same configuration, so the stop goal sends the
+            same shutdown message that the start goal is listening for -->
+            <id>run-zookeeper</id>
+            <goals>
+              <goal>start</goal><!-- runs at pre-integration-test phase -->
+              <goal>stop</goal><!-- runs at post-integration-test phase -->
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>2.17</version>
+        <executions>
+          <execution>
+            <!-- configure failsafe to execute some ITs which use ZooKeeper -->
+            <id>run-integration-tests</id>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+```
+
+  and build your project, similarly to (it runs at the verify phase by default):
+
+```
+mvn verify
+```
+
+[1]: https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
+[2]: http://eclipse.org/jetty/documentation/current/jetty-maven-plugin.html
