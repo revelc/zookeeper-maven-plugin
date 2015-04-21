@@ -15,7 +15,8 @@
 zookeeper-maven-plugin
 ======================
 
-View this plugin's documentation at: http://zmp.revelc.net
+View this plugin's documentation at:
+http://code.revelc.net/zookeeper-maven-plugin
 
 A Maven plugin for launching a ZooKeeper server for integration testing,
 inspired by jetty-maven-plugin.
