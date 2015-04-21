@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package net.revelc.code.zmp;
+package net.revelc.code.zookeeper.maven.plugin;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;

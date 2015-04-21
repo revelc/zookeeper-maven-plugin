@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package net.revelc.code.zmp;
+package net.revelc.code.zookeeper.maven.plugin;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 

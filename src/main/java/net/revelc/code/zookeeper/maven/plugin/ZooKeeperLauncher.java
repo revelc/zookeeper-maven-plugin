@@ -12,18 +12,19 @@
  * limitations under the License.
  */
 
-package net.revelc.code.zmp;
+package net.revelc.code.zookeeper.maven.plugin;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import org.apache.zookeeper.server.ServerConfig;
 import org.apache.zookeeper.server.ZooKeeperServerMain;
 import org.apache.zookeeper.server.quorum.QuorumPeerConfig.ConfigException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -36,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ZooKeeperLauncher {
 
-  private static final PrintStream console = System.err;
+  private static final Logger log = LoggerFactory.getLogger(ZooKeeperLauncher.class);
 
   private static class ShutdownListener implements Runnable {
 
@@ -63,14 +64,13 @@ public class ZooKeeperLauncher {
                 channel.write(UTF_8.encode("done\r\n"));
                 os.flush();
               } catch (IOException e) {
-                e.printStackTrace(console);
+                log.warn("Problem receiving shutdown message", e);
               }
-              console.println("Received shutdown message");
+              log.info("Received shutdown message");
               break;
             }
           } catch (NoSuchElementException e) {
-            console.println("Connection lost to unresponsive client");
-            e.printStackTrace(console);
+            log.warn("Connection lost to unresponsive client", e);
           }
         }
       } catch (IOException e) {
@@ -83,8 +83,7 @@ public class ZooKeeperLauncher {
       new UncaughtExceptionHandler() {
         @Override
         public synchronized void uncaughtException(Thread thread, Throwable exception) {
-          console.println("Uncaught exception in " + thread);
-          exception.printStackTrace(console);
+          log.error("Uncaught exception in {}", thread, exception);
           System.exit(1);
         }
       };
@@ -92,7 +91,6 @@ public class ZooKeeperLauncher {
   private static class RunServer extends ZooKeeperServerMain implements Runnable {
 
     private final ServerConfig config;
-
 
     public RunServer(File zooCfg) {
       config = new ServerConfig();
@@ -138,7 +136,7 @@ public class ZooKeeperLauncher {
 
     // let the plugin know the forked process successfully started
     if (token != null) {
-      console.println("Started ZooKeeper (Token: " + token + ")");
+      System.err.println("Started ZooKeeper (Token: " + token + ")");
     }
 
     try {
@@ -153,10 +151,10 @@ public class ZooKeeperLauncher {
     }
 
     if (serverThread.isAlive()) {
-      console.println("ZooKeeper did not shut down for 5 seconds. Forcing exit...");
+      log.warn("ZooKeeper did not shut down for 5 seconds. Forcing exit...");
       System.exit(1);
     } else {
-      console.println("ZooKeeper shut down successfully.");
+      log.info("ZooKeeper shut down successfully.");
       System.exit(0);
     }
   }
