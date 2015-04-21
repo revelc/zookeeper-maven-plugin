@@ -44,7 +44,16 @@
         <configuration>
           <shutdownString>TestShutDownString</shutdownString>
           <shutdownPort>21122</shutdownPort>
+          <clientPort>21123</clientPort>
         </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>start</goal>
+              <goal>stop</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

@@ -50,7 +50,7 @@ public class StopZooKeeperMojo extends AbstractZooKeeperMojo {
   @Override
   protected void runMojo() throws MojoFailureException, MojoExecutionException {
     ByteBuffer shutdownMsg = UTF_8.encode(shutdownString.trim() + "\r\n");
-    try (Socket s = new Socket(localhost, shutdownPort);
+    try (Socket s = new Socket(clientPortAddress, shutdownPort);
         OutputStream os = s.getOutputStream();
         WritableByteChannel channel = Channels.newChannel(os)) {
       channel.write(shutdownMsg);
@@ -80,8 +80,8 @@ public class StopZooKeeperMojo extends AbstractZooKeeperMojo {
     } catch (ConnectException e) {
       throw new MojoFailureException("ZooKeeper service not running", e);
     } catch (IOException e) {
-      throw new MojoFailureException("Couldn't write shutdown message to " + localhost + ":"
-          + shutdownPort, e);
+      throw new MojoFailureException("Couldn't write shutdown message to " + clientPortAddress
+          + ":" + shutdownPort, e);
     }
   }
 }

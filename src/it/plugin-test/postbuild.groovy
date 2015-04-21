@@ -12,8 +12,14 @@
  * limitations under the License.
  */
 
-File outputDirectory = new File(basedir, "target/zmp");
-assert outputDirectory.isDirectory()
+File dataDir = new File(basedir, "target/zmp/127.0.0.1:21123/data");
+assert dataDir.isDirectory()
 
-File testRoot = new File(basedir, "target/zmp/testRootPassed");
+File confDir = new File(basedir, "target/zmp/127.0.0.1:21123/conf");
+assert confDir.isDirectory()
+
+File testDir = new File(basedir, "target/zmp/it");
+assert testDir.isDirectory()
+
+File testRoot = new File(basedir, "target/zmp/it/testRootPassed");
 assert testRoot.isFile()

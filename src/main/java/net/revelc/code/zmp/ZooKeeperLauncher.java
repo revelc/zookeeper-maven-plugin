@@ -16,10 +16,14 @@ package net.revelc.code.zmp;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import org.apache.log4j.Logger;
+import org.apache.zookeeper.server.ServerConfig;
+import org.apache.zookeeper.server.ZooKeeperServerMain;
+import org.apache.zookeeper.server.quorum.QuorumPeerConfig.ConfigException;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -28,10 +32,11 @@ import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class ZooKeeperLauncher {
 
-  private static final Logger log = Logger.getLogger(ZooKeeperLauncher.class);
+  private static final PrintStream console = System.err;
 
   private static class ShutdownListener implements Runnable {
 
@@ -58,13 +63,14 @@ public class ZooKeeperLauncher {
                 channel.write(UTF_8.encode("done\r\n"));
                 os.flush();
               } catch (IOException e) {
-                log.error("Unable to confirm shutdown", e);
+                e.printStackTrace(console);
               }
-              log.info("Received shutdown message");
+              console.println("Received shutdown message");
               break;
             }
           } catch (NoSuchElementException e) {
-            log.warn("Connection lost to unresponsive client");
+            console.println("Connection lost to unresponsive client");
+            e.printStackTrace(console);
           }
         }
       } catch (IOException e) {
@@ -73,20 +79,100 @@ public class ZooKeeperLauncher {
     }
   }
 
-  /**
-   * Launches the service which executes ZooKeeper in one thread, and a listening service in
-   * another. The listening service triggers termination of the ZooKeeper thread and allows the JVM
-   * to exit.
-   */
-  public static void main(String[] args) throws InterruptedException {
+  private static final UncaughtExceptionHandler loggingExceptionHandler =
+      new UncaughtExceptionHandler() {
+        @Override
+        public synchronized void uncaughtException(Thread thread, Throwable exception) {
+          console.println("Uncaught exception in " + thread);
+          exception.printStackTrace(console);
+          System.exit(1);
+        }
+      };
+
+  private static class RunServer extends ZooKeeperServerMain implements Runnable {
+
+    private final ServerConfig config;
+
+
+    public RunServer(File zooCfg) {
+      config = new ServerConfig();
+      try {
+        config.parse(zooCfg.getAbsolutePath());
+      } catch (ConfigException e) {
+        throw new IllegalArgumentException("Bad configuration file", e);
+      }
+    }
+
+    @Override
+    public void shutdown() {
+      super.shutdown();
+    }
+
+    @Override
+    public void run() {
+      try {
+        runFromConfig(config);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    }
+  }
+
+  public ZooKeeperLauncher(String[] args) {
+    parseArgs(args);
+  }
+
+  private void execute() {
+
+    Thread shutdownThread =
+        new Thread(new ShutdownListener(host, port, shutdownString), "ShutdownListener");
+
+    RunServer server = new RunServer(zooCfg);
+    Thread serverThread = new Thread(server, "ZooKeeperServerThread");
+
+    for (Thread t : new Thread[] {shutdownThread, serverThread}) {
+      t.setDaemon(true);
+      t.setUncaughtExceptionHandler(loggingExceptionHandler);
+      t.start();
+    }
+
+    // let the plugin know the forked process successfully started
+    if (token != null) {
+      console.println("Started ZooKeeper (Token: " + token + ")");
+    }
+
+    try {
+      // wait for shutdown thread to receive shutdown message
+      shutdownThread.join();
+
+      // attempt a safe shutdown, but kill it after 5 seconds
+      server.shutdown();
+      serverThread.join(TimeUnit.SECONDS.toMillis(5));
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+
+    if (serverThread.isAlive()) {
+      console.println("ZooKeeper did not shut down for 5 seconds. Forcing exit...");
+      System.exit(1);
+    } else {
+      console.println("ZooKeeper shut down successfully.");
+      System.exit(0);
+    }
+  }
+
+  private String token = null;
+  private String shutdownString = null;
+  private int port = 0;
+  private File zooCfg = null;
+  private String host = null;
+
+  private void parseArgs(String[] args) {
     boolean nextIsToken = false;
     boolean nextIsShutdownString = false;
     boolean nextIsShutdownPort = false;
     boolean nextIsHost = false;
-    String token = null;
-    String shutdownString = null;
-    int port = 0;
-    String host = null;
+    boolean nextIsZooCfg = false;
     for (String arg : args) {
       if (nextIsToken) {
         token = arg;
@@ -96,33 +182,27 @@ public class ZooKeeperLauncher {
         port = Integer.parseInt(arg);
       } else if (nextIsHost) {
         host = arg;
+      } else if (nextIsZooCfg) {
+        zooCfg = new File(arg);
       }
       nextIsToken = "--token".equals(arg);
       nextIsShutdownString = "--shutdownString".equals(arg);
       nextIsShutdownPort = "--shutdownPort".equals(arg);
       nextIsHost = "--host".equals(arg);
+      nextIsZooCfg = "--zoocfg".equals(arg);
     }
 
     if (port < 1) {
       throw new IllegalArgumentException("Must specify port greater than 0");
     }
-
-    Thread listener =
-        new Thread(new ShutdownListener(host, port, shutdownString), "ShutdownListener");
-    listener.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
-
-      @Override
-      public void uncaughtException(Thread thread, Throwable exception) {
-        log.error("Uncaught exception in " + thread, exception);
-      }
-    });
-    listener.start();
-
-    if (token != null) {
-      log.info("Token: " + token);
-    }
-
-    listener.join();
   }
 
+  /**
+   * Launches the service which executes ZooKeeper in one thread, and a listening service in
+   * another. The listening service triggers termination of the ZooKeeper thread and allows the JVM
+   * to exit.
+   */
+  public static void main(String[] args) {
+    new ZooKeeperLauncher(args).execute();
+  }
 }

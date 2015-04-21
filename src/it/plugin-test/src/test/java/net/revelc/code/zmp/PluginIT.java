@@ -27,11 +27,11 @@ import java.io.File;
 public class PluginIT {
 
   private static ZooKeeper zk;
-  private static File baseDir = new File("target/zmp");
+  private static File baseDir = new File("target/zmp/it");
 
   @BeforeClass
   public static void setUp() throws Exception {
-    zk = new ZooKeeper("localhost", 21122, null);
+    zk = new ZooKeeper("localhost:21123", 2000, null);
     assertTrue(baseDir.mkdirs() || baseDir.isDirectory());
     for (File f : baseDir.listFiles()) {
       assertTrue(f.delete());

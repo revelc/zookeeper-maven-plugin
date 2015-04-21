@@ -17,6 +17,7 @@ package net.revelc.code.zmp;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugin.descriptor.PluginDescriptor;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
@@ -25,13 +26,20 @@ public abstract class AbstractZooKeeperMojo extends AbstractMojo {
   @Parameter(defaultValue = "${project}", readonly = true)
   protected MavenProject project;
 
+  @Parameter(defaultValue = "${plugin}", readonly = true)
+  protected PluginDescriptor plugin;
+
   /**
-   * The host name of the localhost.
+   * The local address on which to run the ZooKeeper server.
+   *
+   * <p>
+   * (Also affects the {@code shutdownPort}.)
    *
    * @since 1.0.0
    */
-  @Parameter(alias = "localhost", property = "zmp.localhost", defaultValue = "localhost")
-  protected String localhost;
+  @Parameter(alias = "clientPortAddress", property = "zmp.clientPortAddress",
+      defaultValue = "127.0.0.1")
+  protected String clientPortAddress;
 
   /**
    * The port on which to listen for the shutdown string.

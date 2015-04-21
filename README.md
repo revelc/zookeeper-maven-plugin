@@ -17,7 +17,8 @@ zookeeper-maven-plugin
 
 View this plugin's documentation at: http://zmp.revelc.net
 
-A Maven plugin for launching a ZooKeeper server for integration testing.
+A Maven plugin for launching a ZooKeeper server for integration testing,
+inspired by jetty-maven-plugin.
 
 This plugin uses [Semantic Versioning 2.0.0][2] for its own versioning. Its
 public API is the names of the goals and configuration options.
