@@ -12,6 +12,8 @@
   limitations under the License.
 -->
 
+[![Build Status][travis_img]][travis_link][![Maven central][maven_img]][maven_link]
+
 zookeeper-maven-plugin
 ======================
 
@@ -21,8 +23,12 @@ http://code.revelc.net/zookeeper-maven-plugin
 A Maven plugin for launching a ZooKeeper server for integration testing,
 inspired by jetty-maven-plugin.
 
-This plugin uses [Semantic Versioning 2.0.0][2] for its own versioning. Its
+This plugin uses [Semantic Versioning 2.0.0][1] for its own versioning. Its
 public API is the names of the goals and configuration options.
 
-[2]: http://semver.org/spec/v2.0.0.html
+[1]: http://semver.org/spec/v2.0.0.html
+[travis_img]: https://travis-ci.org/revelc/zookeeper-maven-plugin.svg?branch=master
+[travis_link]: https://travis-ci.org/revelc/zookeeper-maven-plugin
+[maven_img]: https://maven-badges.herokuapp.com/maven-central/net.revelc.code/zookeeper-maven-plugin/badge.svg
+[maven_link]: https://maven-badges.herokuapp.com/maven-central/net.revelc.code/zookeeper-maven-plugin
 
