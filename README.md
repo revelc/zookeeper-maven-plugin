@@ -12,7 +12,7 @@
   limitations under the License.
 -->
 
-[![Build Status][travis_img]][travis_link][![Maven central][maven_img]][maven_link]
+[![Build Status][travis_img]][travis_link][![Maven Central][maven_img]][maven_link]
 
 zookeeper-maven-plugin
 ======================
