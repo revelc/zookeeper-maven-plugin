@@ -149,7 +149,7 @@ public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
       throw new MojoExecutionException("Can't create " + "plugin directory: "
           + zmpDir.getAbsolutePath());
     }
-    baseDir = new File(zmpDir, clientPortAddress + ":" + clientPort);
+    baseDir = new File(zmpDir, clientPortAddress + "_" + clientPort);
     try {
       FileUtils.deleteDirectory(baseDir);
     } catch (IOException e) {
