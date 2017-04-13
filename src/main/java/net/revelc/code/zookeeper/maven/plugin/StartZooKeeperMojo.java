@@ -37,7 +37,7 @@ import java.util.UUID;
 @Mojo(name = "start", defaultPhase = LifecyclePhase.PRE_INTEGRATION_TEST, threadSafe = true)
 public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
 
-  @Parameter(defaultValue = "${project.build.directory}/zmp", readonly = true)
+  @Parameter(defaultValue = "${project.build.directory}/zmp", property = "zmp.directory")
   protected File zmpDir;
 
   /**
