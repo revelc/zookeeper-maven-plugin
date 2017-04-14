@@ -14,8 +14,6 @@
 
 package net.revelc.code.zookeeper.maven.plugin;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -31,13 +29,15 @@ import java.util.Properties;
 import java.util.Scanner;
 import java.util.UUID;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 /**
  * Starts a service which runs the ZooKeeper server.
  */
 @Mojo(name = "start", defaultPhase = LifecyclePhase.PRE_INTEGRATION_TEST, threadSafe = true)
 public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
 
-  @Parameter(defaultValue = "${project.build.directory}/zmp", readonly = true)
+  @Parameter(alias = "zmpDir", required = true, property = "zmp.dir", defaultValue = "${project.build.directory}/zmp")
   protected File zmpDir;
 
   /**
@@ -80,6 +80,15 @@ public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
    */
   @Parameter(alias = "maxClientCnxns", property = "zmp.maxClientCnxns", defaultValue = "100")
   protected int maxClientCnxns;
+
+  /**
+   * Keep previous zookeeper data and state. Must use a different value for zmpDir other than it's
+   * default value.
+   *
+   * @since 1.0.0
+   */
+  @Parameter(alias = "keepPreviousState", property = "zmp.keepPreviousState", defaultValue = "false", required = true)
+  protected boolean keepPreviousState;
 
   private File baseDir;
   private File dataDir;
@@ -150,21 +159,25 @@ public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
           + zmpDir.getAbsolutePath());
     }
     baseDir = new File(zmpDir, clientPortAddress + "_" + clientPort);
-    try {
-      FileUtils.deleteDirectory(baseDir);
-    } catch (IOException e) {
-      throw new MojoExecutionException("Can't clean " + "plugin directory: "
-          + baseDir.getAbsolutePath());
+    if(!keepPreviousState) {
+      try {
+        FileUtils.deleteDirectory(baseDir);
+      } catch (IOException e) {
+        throw new MojoExecutionException("Can't clean " + "plugin directory: "
+            + baseDir.getAbsolutePath());
+      }
     }
     if (!baseDir.mkdirs() && !baseDir.isDirectory()) {
       throw new MojoExecutionException("Can't create plugin directory: "
           + baseDir.getAbsolutePath());
     }
     dataDir = new File(baseDir, "data");
-    try {
-      FileUtils.deleteDirectory(dataDir);
-    } catch (IOException e) {
-      throw new MojoExecutionException("Can't clean data directory: " + baseDir.getAbsolutePath());
+    if(!keepPreviousState) {
+      try {
+        FileUtils.deleteDirectory(dataDir);
+      } catch (IOException e) {
+        throw new MojoExecutionException("Can't clean data directory: " + baseDir.getAbsolutePath());
+      }
     }
   }
 
