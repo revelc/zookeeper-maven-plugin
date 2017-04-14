@@ -14,6 +14,8 @@
 
 package net.revelc.code.zookeeper.maven.plugin;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -28,8 +30,6 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.UUID;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * Starts a service which runs the ZooKeeper server.
