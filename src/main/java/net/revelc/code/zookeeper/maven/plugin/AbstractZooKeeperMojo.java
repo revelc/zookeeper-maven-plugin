@@ -32,8 +32,7 @@ public abstract class AbstractZooKeeperMojo extends AbstractMojo {
   /**
    * The local address on which to run the ZooKeeper server.
    *
-   * <p>
-   * (Also affects the {@code shutdownPort}.)
+   * <p>(Also affects the {@code shutdownPort}.)
    *
    * @since 1.0.0
    */

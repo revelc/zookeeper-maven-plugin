@@ -16,12 +16,6 @@ package net.revelc.code.zookeeper.maven.plugin;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.ConnectException;
@@ -32,6 +26,12 @@ import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
 /**
  * Stops the service running the ZooKeeper server.

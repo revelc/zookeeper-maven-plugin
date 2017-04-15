@@ -16,20 +16,25 @@ package net.revelc.code.zookeeper.maven.plugin;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.Properties;
+import java.util.Scanner;
+import java.util.UUID;
+
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.Watcher;
+import org.apache.zookeeper.ZooKeeper;
 import org.codehaus.plexus.util.FileUtils;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Properties;
-import java.util.Scanner;
-import java.util.UUID;
 
 /**
  * Starts a service which runs the ZooKeeper server.
@@ -37,7 +42,13 @@ import java.util.UUID;
 @Mojo(name = "start", defaultPhase = LifecyclePhase.PRE_INTEGRATION_TEST, threadSafe = true)
 public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
 
-  @Parameter(alias = "zmpDir", required = true, property = "zmp.dir", defaultValue = "${project.build.directory}/zmp")
+  /**
+   * The directory to use to store plugin data and state.
+   *
+   * @since 1.1.0
+   */
+  @Parameter(alias = "directory", property = "zmp.directory",
+      defaultValue = "${project.build.directory}/zmp")
   protected File zmpDir;
 
   /**
@@ -82,12 +93,12 @@ public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
   protected int maxClientCnxns;
 
   /**
-   * Keep previous zookeeper data and state. Must use a different value for zmpDir other than it's
-   * default value.
+   * Keep previous ZooKeeper data and state. Best used with non-default directory.
    *
-   * @since 1.0.0
+   * @since 1.1.0
    */
-  @Parameter(alias = "keepPreviousState", property = "zmp.keepPreviousState", defaultValue = "false", required = true)
+  @Parameter(alias = "keepPreviousState", property = "zmp.keepPreviousState",
+      defaultValue = "false")
   protected boolean keepPreviousState;
 
   private File baseDir;
@@ -142,6 +153,33 @@ public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
           }
           checklines--;
         }
+        boolean canConnect = false;
+        Watcher noopWatcher = new Watcher() {
+          @Override
+          public void process(WatchedEvent event) {}
+        };
+        while (!canConnect) {
+          ZooKeeper zk = null;
+          try {
+            String address = clientPortAddress + ":" + clientPort;
+            getLog().info("Waiting for ZooKeeper on " + address + "...");
+            zk = new ZooKeeper(address, tickTime, noopWatcher);
+            zk.getChildren("/", false);
+            getLog().info("ZooKeeper is running on " + address + ".");
+            canConnect = true;
+          } catch (Exception e) {
+            getLog().info("ZooKeeper not yet ready: " + e.getMessage());
+            getLog().debug("ZooKeeper not yet ready: " + e.getMessage(), e);
+          } finally {
+            if (zk != null) {
+              try {
+                zk.close();
+              } catch (InterruptedException e) {
+                // don't care
+              }
+            }
+          }
+        }
         if (verifiedStart) {
           getLog().info("ZooKeeper service has started");
         } else {
@@ -155,28 +193,29 @@ public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
 
   private void parseConfig() throws MojoExecutionException {
     if (!zmpDir.mkdirs() && !zmpDir.isDirectory()) {
-      throw new MojoExecutionException("Can't create " + "plugin directory: "
-          + zmpDir.getAbsolutePath());
+      throw new MojoExecutionException(
+          "Can't create " + "plugin directory: " + zmpDir.getAbsolutePath());
     }
     baseDir = new File(zmpDir, clientPortAddress + "_" + clientPort);
-    if(!keepPreviousState) {
+    if (!keepPreviousState) {
       try {
         FileUtils.deleteDirectory(baseDir);
       } catch (IOException e) {
-        throw new MojoExecutionException("Can't clean " + "plugin directory: "
-            + baseDir.getAbsolutePath());
+        throw new MojoExecutionException(
+            "Can't clean " + "plugin directory: " + baseDir.getAbsolutePath());
       }
     }
     if (!baseDir.mkdirs() && !baseDir.isDirectory()) {
-      throw new MojoExecutionException("Can't create plugin directory: "
-          + baseDir.getAbsolutePath());
+      throw new MojoExecutionException(
+          "Can't create plugin directory: " + baseDir.getAbsolutePath());
     }
     dataDir = new File(baseDir, "data");
-    if(!keepPreviousState) {
+    if (!keepPreviousState) {
       try {
         FileUtils.deleteDirectory(dataDir);
       } catch (IOException e) {
-        throw new MojoExecutionException("Can't clean data directory: " + baseDir.getAbsolutePath());
+        throw new MojoExecutionException(
+            "Can't clean data directory: " + baseDir.getAbsolutePath());
       }
     }
   }
@@ -184,14 +223,14 @@ public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
   private File createZooCfg() throws MojoExecutionException, MojoFailureException {
     File confDir = new File(baseDir, "conf");
     if (!confDir.mkdirs() && !confDir.isDirectory()) {
-      throw new MojoExecutionException("Can't create configuration directory: "
-          + confDir.getAbsolutePath());
+      throw new MojoExecutionException(
+          "Can't create configuration directory: " + confDir.getAbsolutePath());
     }
 
     File zooCfgFile = new File(confDir, "zoo.cfg");
     if (zooCfgFile.exists() && !zooCfgFile.delete()) {
-      throw new MojoExecutionException("Can't delete existing configuration file: "
-          + zooCfgFile.getAbsolutePath());
+      throw new MojoExecutionException(
+          "Can't delete existing configuration file: " + zooCfgFile.getAbsolutePath());
     }
 
     Properties zooCfg = new Properties();
@@ -203,7 +242,7 @@ public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
     zooCfg.setProperty("maxClientCnxns", maxClientCnxns + "");
     zooCfg.setProperty("dataDir", dataDir.getAbsolutePath());
 
-    try (FileWriter fileWriter = new FileWriter(zooCfgFile)) {
+    try (Writer fileWriter = new OutputStreamWriter(new FileOutputStream(zooCfgFile), UTF_8)) {
       zooCfg.store(fileWriter, null);
     } catch (IOException e) {
       throw new MojoFailureException("Unable to create " + zooCfgFile.getAbsolutePath(), e);
