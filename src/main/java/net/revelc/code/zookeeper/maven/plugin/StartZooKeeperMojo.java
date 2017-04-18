@@ -47,7 +47,7 @@ public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
    *
    * @since 1.1.0
    */
-  @Parameter(alias = "directory", property = "zmp.directory",
+  @Parameter(alias = "zmpDir", property = "zmp.directory",
       defaultValue = "${project.build.directory}/zmp")
   protected File zmpDir;
 
