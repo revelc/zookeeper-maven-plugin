@@ -88,5 +88,27 @@ Getting Started
 mvn verify
 ```
 
+Retaining ZooKeeper's Data/State
+-----------
+  By default `zookeeper-maven-plugin` will create a `zmp` directory under your
+  project's `${project.build.directory}`. This directory is typically cleared
+  and it's children recreated with a new build. You can change the `zmp` directory
+  providing the following configuration:
+  ```
+  <zmpDir>/path/to/different/zmp</zmpDir>
+  ```
+
+  Now future builds will create a zmpDir at the above location.
+
+  You can take it a step further and add the following to keep data between builds.
+
+  ```
+  <keepPreviousState>true</keepPreviousState>
+  ```
+
+  Both configurations have to be present if you wish to keep data between builds.
+
+
+
 [1]: https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
 [2]: http://eclipse.org/jetty/documentation/current/jetty-maven-plugin.html
