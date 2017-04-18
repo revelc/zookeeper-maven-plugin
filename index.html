@@ -31,7 +31,7 @@
 
       <div id="breadcrumbs">
         <ul class="breadcrumb">
-        <li id="publishDate">Last Published: 2017-04-16<span class="divider">|</span>
+        <li id="publishDate">Last Published: 2017-04-18<span class="divider">|</span>
 </li>
           <li id="projectVersion">Version: 1.1.0</li>
         </ul>
@@ -152,11 +152,22 @@
     &lt;/plugins&gt;
   &lt;/build&gt;
 </pre></div></div>
-<p>and build your project, similarly to (it runs at the verify phase by default):</p>
+<p>and build your project, similarly to (it runs at the verify phase by  default):</p>
 
 <div class="source">
 <div class="source"><pre class="prettyprint linenums">mvn verify
 </pre></div></div></div>
+<div class="section">
+<h2><a name="Retaining_ZooKeepers_DataState"></a>Retaining ZooKeeper&#x2019;s Data/State</h2>
+<p>By default, <tt>zookeeper-maven-plugin</tt> will create a <tt>zmp</tt> directory under your  project&#x2019;s <tt>${project.build.directory}</tt>. This directory is typically  cleared and its children recreated with each new build. You can change the  <tt>zmp</tt> directory providing the following configuration:  <tt>
+  &lt;zmpDir&gt;/path/to/different/zmp&lt;/zmpDir&gt;
+</tt></p>
+<p>Now, future builds will create use that location, creating it if it doesn&#x2019;t  exist.</p>
+<p>You can take it a step further and add the following to keep data between  builds.</p>
+<p><tt>
+  &lt;keepPreviousState&gt;true&lt;/keepPreviousState&gt;
+</tt></p>
+<p>Both configurations must be present if you wish to keep data between builds.  The boolean ensures the plugin itself doesn&#x2019;t delete the directory, and using  a different directory than the default ensures it is safe from <tt>mvn clean</tt>  (assuming the directory you&#x2019;ve chosen is outside your  <tt>${project.build.directory}</tt> and you don&#x2019;t have any special <tt>clean</tt> tasks  configured).</p></div>
         </div>
       </div>
     </div>
