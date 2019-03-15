@@ -61,7 +61,7 @@ public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
   protected int clientPort;
 
   /**
-   * The tickTime ZooKeeper option
+   * The tickTime ZooKeeper option.
    *
    * @since 1.0.0
    */
@@ -69,7 +69,7 @@ public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
   protected int tickTime;
 
   /**
-   * The initLimit ZooKeeper option
+   * The initLimit ZooKeeper option.
    *
    * @since 1.0.0
    */
@@ -77,7 +77,7 @@ public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
   protected int initLimit;
 
   /**
-   * The syncLimit ZooKeeper option
+   * The syncLimit ZooKeeper option.
    *
    * @since 1.0.0
    */
