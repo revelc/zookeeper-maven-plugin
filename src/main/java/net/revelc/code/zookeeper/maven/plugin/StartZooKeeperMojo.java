@@ -24,7 +24,6 @@ import java.io.Writer;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.UUID;
-
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -156,7 +155,9 @@ public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
         boolean canConnect = false;
         Watcher noopWatcher = new Watcher() {
           @Override
-          public void process(WatchedEvent event) {}
+          public void process(WatchedEvent event) {
+            // noop
+          }
         };
         while (!canConnect) {
           ZooKeeper zk = null;
