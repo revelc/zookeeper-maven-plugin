@@ -27,7 +27,7 @@ This plugin uses [Semantic Versioning 2.0.0][1] for its own versioning. Its
 public API is the names of the goals and configuration options.
 
 [1]: http://semver.org/spec/v2.0.0.html
-[travis_img]: https://travis-ci.org/revelc/zookeeper-maven-plugin.svg?branch=master
+[travis_img]: https://travis-ci.org/revelc/zookeeper-maven-plugin.svg?branch=main
 [travis_link]: https://travis-ci.org/revelc/zookeeper-maven-plugin
 [maven_img]: https://maven-badges.herokuapp.com/maven-central/net.revelc.code/zookeeper-maven-plugin/badge.svg
 [maven_link]: https://maven-badges.herokuapp.com/maven-central/net.revelc.code/zookeeper-maven-plugin
