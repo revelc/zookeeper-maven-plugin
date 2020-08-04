@@ -12,7 +12,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.apache</groupId>
@@ -25,7 +25,7 @@
   <packaging>maven-plugin</packaging>
   <name>ZooKeeper Maven Plugin</name>
   <description>A Maven plugin for launching a ZooKeeper server for integration testing</description>
-  <url>http://code.revelc.net/zookeeper-maven-plugin</url>
+  <url>https://code.revelc.net/zookeeper-maven-plugin</url>
   <organization>
     <name>Revelc</name>
     <url>https://github.com/revelc</url>
@@ -33,7 +33,7 @@
   <licenses>
     <license>
       <name>Apache License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+      <url>https://www.apache.org/licenses/LICENSE-2.0</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
@@ -58,6 +58,10 @@
     <system>GitHub</system>
     <url>https://github.com/revelc/zookeeper-maven-plugin/issues</url>
   </issueManagement>
+  <ciManagement>
+    <system>GitHub</system>
+    <url>https://github.com/revelc/zookeeper-maven-plugin/actions</url>
+  </ciManagement>
   <distributionManagement>
     <!-- https://issues.sonatype.org/browse/OSSRH-15142 -->
     <repository>
