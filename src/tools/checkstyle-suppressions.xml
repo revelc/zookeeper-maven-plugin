@@ -18,6 +18,6 @@
 
 <suppressions>
   <suppress checks="AbbreviationAsWordInName"
-    files="src/main/java/net/revelc/code/zookeeper/maven/plugin/AbstractZooKeeperMojo.java"/>
+    files="src[\\/]main[\\/]java[\\/]net[\\/]revelc[\\/]code[\\/]zookeeper[\\/]maven[\\/]plugin[\\/]AbstractZooKeeperMojo.java"/>
 </suppressions>
 
