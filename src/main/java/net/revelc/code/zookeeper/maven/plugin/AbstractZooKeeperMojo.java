@@ -30,9 +30,8 @@ public abstract class AbstractZooKeeperMojo extends AbstractMojo {
   protected PluginDescriptor plugin;
 
   /**
-   * The local address on which to run the ZooKeeper server.
-   *
-   * <p>(Also affects the {@code shutdownPort}.)
+   * The local address on which to run the ZooKeeper server. This also affects the
+   * {@code shutdownPort}.
    *
    * @since 1.0.0
    */

@@ -30,7 +30,6 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooKeeper;
 import org.codehaus.plexus.util.FileUtils;
@@ -117,7 +116,11 @@ public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
       builder.command().add(classpath);
     }
 
+    builder.command().add("-Dzookeeper.jmx.log4j.disable=true");
+    builder.command().add("-Dorg.slf4j.simpleLogger.defaultLogLevel=info");
     builder.command().add(ZooKeeperLauncher.class.getName());
+    builder.command().add("--logdir");
+    builder.command().add(zmpDir.getAbsolutePath());
     builder.command().add("--shutdownPort");
     builder.command().add(Integer.toString(shutdownPort));
     builder.command().add("--shutdownString");
@@ -153,11 +156,8 @@ public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
           checklines--;
         }
         boolean canConnect = false;
-        Watcher noopWatcher = new Watcher() {
-          @Override
-          public void process(WatchedEvent event) {
-            // noop
-          }
+        Watcher noopWatcher = (event) -> {
+          // noop
         };
         while (!canConnect) {
           ZooKeeper zk = null;
@@ -171,6 +171,12 @@ public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
           } catch (Exception e) {
             getLog().info("ZooKeeper not yet ready: " + e.getMessage());
             getLog().debug("ZooKeeper not yet ready: " + e.getMessage(), e);
+            try {
+              Thread.sleep(1000);
+            } catch (InterruptedException e1) {
+              Thread.currentThread().interrupt();
+              throw new MojoExecutionException("interrupted", e1);
+            }
           } finally {
             if (zk != null) {
               try {
@@ -242,6 +248,8 @@ public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
     zooCfg.setProperty("clientPort", clientPort + "");
     zooCfg.setProperty("maxClientCnxns", maxClientCnxns + "");
     zooCfg.setProperty("dataDir", dataDir.getAbsolutePath());
+    zooCfg.setProperty("4lw.commands.whitelist", "ruok,wchs");
+    zooCfg.setProperty("admin.enableServer", "false");
 
     try (Writer fileWriter = new OutputStreamWriter(new FileOutputStream(zooCfgFile), UTF_8)) {
       zooCfg.store(fileWriter, null);

@@ -17,8 +17,11 @@ package net.revelc.code.zookeeper.maven.plugin;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintStream;
+import java.io.UncheckedIOException;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -28,6 +31,7 @@ import java.nio.channels.WritableByteChannel;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+import org.apache.zookeeper.metrics.impl.NullMetricsProvider;
 import org.apache.zookeeper.server.ServerConfig;
 import org.apache.zookeeper.server.ZooKeeperServerMain;
 import org.apache.zookeeper.server.quorum.QuorumPeerConfig.ConfigException;
@@ -92,7 +96,12 @@ public class ZooKeeperLauncher {
     private final ServerConfig config;
 
     public RunServer(File zooCfg) {
-      config = new ServerConfig();
+      config = new ServerConfig() {
+        @Override
+        public String getMetricsProviderClassName() {
+          return NullMetricsProvider.class.getName();
+        }
+      };
       try {
         config.parse(zooCfg.getAbsolutePath());
       } catch (ConfigException e) {
@@ -109,7 +118,10 @@ public class ZooKeeperLauncher {
     public void run() {
       try {
         runFromConfig(config);
-      } catch (IOException e) {
+      } catch (Exception e) {
+        if (e instanceof RuntimeException) {
+          throw (RuntimeException) e;
+        }
         throw new RuntimeException(e);
       }
     }
@@ -135,7 +147,7 @@ public class ZooKeeperLauncher {
 
     // let the plugin know the forked process successfully started
     if (token != null) {
-      System.err.println("Started ZooKeeper (Token: " + token + ")");
+      tokenEmitter.println("Started ZooKeeper (Token: " + token + ")");
     }
 
     try {
@@ -158,6 +170,7 @@ public class ZooKeeperLauncher {
     }
   }
 
+  private PrintStream tokenEmitter = System.err;
   private String token = null;
   private String shutdownString = null;
   private int port = 0;
@@ -165,13 +178,23 @@ public class ZooKeeperLauncher {
   private String host = null;
 
   private void parseArgs(String[] args) {
+    boolean nextIsLogDir = false;
     boolean nextIsToken = false;
     boolean nextIsShutdownString = false;
     boolean nextIsShutdownPort = false;
     boolean nextIsHost = false;
     boolean nextIsZooCfg = false;
     for (String arg : args) {
-      if (nextIsToken) {
+      if (nextIsLogDir) {
+        try {
+          System.setErr(
+              new PrintStream(new FileOutputStream(arg + "/zkServer.stderr"), true, UTF_8.name()));
+          System.setOut(
+              new PrintStream(new FileOutputStream(arg + "/zkServer.stdout"), true, UTF_8.name()));
+        } catch (IOException e) {
+          throw new UncheckedIOException(e);
+        }
+      } else if (nextIsToken) {
         token = arg;
       } else if (nextIsShutdownString) {
         shutdownString = arg;
@@ -182,6 +205,7 @@ public class ZooKeeperLauncher {
       } else if (nextIsZooCfg) {
         zooCfg = new File(arg);
       }
+      nextIsLogDir = "--logdir".equals(arg);
       nextIsToken = "--token".equals(arg);
       nextIsShutdownString = "--shutdownString".equals(arg);
       nextIsShutdownPort = "--shutdownPort".equals(arg);

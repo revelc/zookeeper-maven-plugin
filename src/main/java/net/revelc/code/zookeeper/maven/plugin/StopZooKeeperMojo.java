@@ -69,8 +69,8 @@ public class StopZooKeeperMojo extends AbstractZooKeeperMojo {
               }
             }
           } catch (SocketTimeoutException e) {
-            throw new MojoExecutionException(
-                "Shutdown response not received within the time limit", e);
+            throw new MojoExecutionException("Shutdown response not received within the time limit",
+                e);
           }
         } else {
           throw new MojoExecutionException("shutdownWait too large; can't convert to millis");
@@ -79,8 +79,8 @@ public class StopZooKeeperMojo extends AbstractZooKeeperMojo {
     } catch (ConnectException e) {
       throw new MojoFailureException("ZooKeeper service not running", e);
     } catch (IOException e) {
-      throw new MojoFailureException("Couldn't write shutdown message to " + clientPortAddress
-          + ":" + shutdownPort, e);
+      throw new MojoFailureException(
+          "Couldn't write shutdown message to " + clientPortAddress + ":" + shutdownPort, e);
     }
   }
 }

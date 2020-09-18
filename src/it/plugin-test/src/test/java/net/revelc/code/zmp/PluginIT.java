@@ -14,7 +14,6 @@
 
 package net.revelc.code.zmp;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -22,7 +21,6 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.KeeperException.Code;
-import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.data.Stat;
@@ -41,13 +39,10 @@ public class PluginIT {
 
   @Before
   public void setUpZkConnection() throws Exception {
-    Watcher noopWatcher = new Watcher() {
-      @Override
-      public void process(WatchedEvent event) {}
-    };
+    Watcher noopWatcher = (event) -> {};
     while (zk == null) {
       try {
-        String address = "localhost:21123";
+        String address = "127.0.0.1:21123";
         zk = new ZooKeeper(address, 2000, noopWatcher);
       } catch (IOException e) {
         if (e.getCause() != null && e.getCause() instanceof KeeperException) {
