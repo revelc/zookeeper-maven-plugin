@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.UUID;
@@ -99,6 +100,17 @@ public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
       defaultValue = "false")
   protected boolean keepPreviousState;
 
+  /**
+   * When set, this adds the configured JVM args to the Java command line. This can also be used to
+   * set Java system properties used by ZooKeeper to control its behavior, such as enabling 4lw
+   * commands or enabling the AdminServer (ZooKeeper defaults to enabling the AdminServer, but this
+   * plugin defaults to disabled; users can override the plugin's default and reenable it here).
+   *
+   * @since 1.2.0
+   */
+  @Parameter(alias = "jvmArgs")
+  protected List<String> jvmArgs;
+
   private File baseDir;
   private File dataDir;
 
@@ -110,14 +122,19 @@ public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
     builder.command().add(getJavaCommand());
 
     String classpath = getClasspath();
-    getLog().warn(classpath);
     if (!classpath.isEmpty()) {
-      builder.command().add("-cp");
-      builder.command().add(classpath);
+      builder.environment().put("CLASSPATH", classpath);
     }
+    getLog().debug("  ZooKeeper environment: " + builder.environment());
 
+    // disable admin server by default
+    builder.command().add("-Dzookeeper.admin.enableServer=false");
     builder.command().add("-Dzookeeper.jmx.log4j.disable=true");
     builder.command().add("-Dorg.slf4j.simpleLogger.defaultLogLevel=info");
+    if (jvmArgs != null) {
+      jvmArgs.stream().map(String::trim).filter(s -> !s.isEmpty()).forEach(builder.command()::add);
+    }
+
     builder.command().add(ZooKeeperLauncher.class.getName());
     builder.command().add("--logdir");
     builder.command().add(zmpDir.getAbsolutePath());
@@ -136,6 +153,7 @@ public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
 
     builder.directory(project.getBasedir());
     getLog().info("Starting ZooKeeper");
+    getLog().debug("  ZooKeeper command: " + String.join(" ", builder.command()));
 
     Process forkedProcess = null;
     try {
@@ -248,8 +266,6 @@ public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
     zooCfg.setProperty("clientPort", clientPort + "");
     zooCfg.setProperty("maxClientCnxns", maxClientCnxns + "");
     zooCfg.setProperty("dataDir", dataDir.getAbsolutePath());
-    zooCfg.setProperty("4lw.commands.whitelist", "ruok,wchs");
-    zooCfg.setProperty("admin.enableServer", "false");
 
     try (Writer fileWriter = new OutputStreamWriter(new FileOutputStream(zooCfgFile), UTF_8)) {
       zooCfg.store(fileWriter, null);
