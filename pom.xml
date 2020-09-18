@@ -303,6 +303,19 @@
             <localCheckout>true</localCheckout>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.8.2</version>
+          <dependencies>
+            <!-- Fluido is listed here for version update checking only -->
+            <dependency>
+              <groupId>org.apache.maven.skins</groupId>
+              <artifactId>maven-fluido-skin</artifactId>
+              <version>1.9</version>
+            </dependency>
+          </dependencies>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
@@ -484,7 +497,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
-        <version>3.6</version>
+        <version>3.6.0</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
