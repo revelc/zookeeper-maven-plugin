@@ -21,6 +21,9 @@ import org.apache.maven.plugin.descriptor.PluginDescriptor;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
+/**
+ * Base class for common code for both Start and Stop Mojos.
+ */
 public abstract class AbstractZooKeeperMojo extends AbstractMojo {
 
   @Parameter(defaultValue = "${project}", readonly = true)

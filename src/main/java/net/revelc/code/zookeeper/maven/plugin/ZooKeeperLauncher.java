@@ -38,6 +38,9 @@ import org.apache.zookeeper.server.quorum.QuorumPeerConfig.ConfigException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Utility class for launching and managing ZooKeeper processes.
+ */
 public class ZooKeeperLauncher {
 
   private static final Logger log = LoggerFactory.getLogger(ZooKeeperLauncher.class);
