@@ -85,7 +85,7 @@
     <maven.tools-version>3.8.1</maven.tools-version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <slf4j.version>1.7.31</slf4j.version>
+    <slf4j.version>1.7.32</slf4j.version>
   </properties>
   <dependencyManagement>
     <dependencies>
