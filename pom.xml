@@ -82,7 +82,7 @@
     <maven.min-version>3.6.0</maven.min-version>
     <!-- skip standard site deployment, because site is deployed using github plugin instead -->
     <maven.site.deploy.skip>true</maven.site.deploy.skip>
-    <maven.tools-version>3.8.1</maven.tools-version>
+    <maven.tools-version>3.8.2</maven.tools-version>
     <project.build.outputTimestamp>2021-08-03T00:00:00Z</project.build.outputTimestamp>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
