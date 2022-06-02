@@ -80,7 +80,7 @@ public class ZooKeeperLauncher {
           }
         }
       } catch (IOException e) {
-        throw new RuntimeException(e);
+        throw new UncheckedIOException(e);
       }
     }
   }
@@ -122,10 +122,7 @@ public class ZooKeeperLauncher {
       try {
         runFromConfig(config);
       } catch (Exception e) {
-        if (e instanceof RuntimeException) {
-          throw (RuntimeException) e;
-        }
-        throw new RuntimeException(e);
+        throw new IllegalStateException(e);
       }
     }
   }
@@ -161,7 +158,7 @@ public class ZooKeeperLauncher {
       server.shutdown();
       serverThread.join(TimeUnit.SECONDS.toMillis(5));
     } catch (InterruptedException e) {
-      throw new RuntimeException(e);
+      throw new IllegalStateException(e);
     }
 
     if (serverThread.isAlive()) {
