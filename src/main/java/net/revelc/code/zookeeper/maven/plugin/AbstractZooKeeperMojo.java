@@ -14,6 +14,11 @@
 
 package net.revelc.code.zookeeper.maven.plugin;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.util.Comparator;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -124,4 +129,23 @@ public abstract class AbstractZooKeeperMojo extends AbstractMojo {
 
     return false;
   }
+
+  static void deleteDirectory(File baseDir, String dirType) throws MojoExecutionException {
+    if (!baseDir.exists()) {
+      return;
+    }
+    try {
+      Files.walk(baseDir.toPath()).sorted(Comparator.reverseOrder()).forEach(path -> {
+        try {
+          Files.deleteIfExists(path);
+        } catch (IOException e) {
+          throw new UncheckedIOException(e);
+        }
+      });
+    } catch (IOException | UncheckedIOException e) {
+      throw new MojoExecutionException(
+          "Can't clean " + dirType + " directory: " + baseDir.getAbsolutePath(), e);
+    }
+  }
+
 }

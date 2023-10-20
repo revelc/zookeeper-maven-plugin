@@ -19,17 +19,17 @@
   <version>@project.version@</version>
   <description>A simple IT verifying the basic use case.</description>
   <properties>
-    <maven.compiler.release>8</maven.compiler.release>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.release>@maven.compiler.release@</maven.compiler.release>
+    <maven.compiler.source>@maven.compiler.source@</maven.compiler.source>
+    <maven.compiler.target>@maven.compiler.target@</maven.compiler.target>
+    <project.build.sourceEncoding>@project.build.sourceEncoding@</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>@project.reporting.outputEncoding@</project.reporting.outputEncoding>
   </properties>
   <dependencies>
     <dependency>
       <groupId>org.apache.zookeeper</groupId>
       <artifactId>zookeeper</artifactId>
-      <version>3.6.2</version>
+      <version>@version.zookeeper@</version>
       <exclusions>
         <exclusion>
           <groupId>org.slf4j</groupId>
@@ -44,7 +44,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.13.1</version>
+      <version>@version.junit@</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -71,7 +71,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
-        <version>3.0.0-M5</version>
+        <version>@version.maven-surefire@</version>
         <executions>
           <execution>
             <id>run-integration-tests</id>

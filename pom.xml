@@ -17,7 +17,7 @@
   <parent>
     <groupId>org.apache</groupId>
     <artifactId>apache</artifactId>
-    <version>29</version>
+    <version>30</version>
   </parent>
   <groupId>net.revelc.code</groupId>
   <artifactId>zookeeper-maven-plugin</artifactId>
@@ -46,7 +46,7 @@
     <mailingList />
   </mailingLists>
   <prerequisites>
-    <maven>${maven.min-version}</maven>
+    <maven>${minimalMavenBuildVersion}</maven>
   </prerequisites>
   <scm>
     <connection>scm:git:https://github.com/revelc/zookeeper-maven-plugin.git</connection>
@@ -79,38 +79,46 @@
     <maven.compiler.release>8</maven.compiler.release>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <maven.min-version>3.6.0</maven.min-version>
     <!-- skip standard site deployment, because site is deployed using github plugin instead -->
     <maven.site.deploy.skip>true</maven.site.deploy.skip>
-    <maven.tools-version>3.9.1</maven.tools-version>
+    <!-- versions-maven-plugin ignore patterns for snapshots, alpha, beta, milestones, and release candidates -->
+    <maven.version.ignore>.+-SNAPSHOT,(?i).*(alpha|beta)[0-9.-]*,(?i).*[.-](m|rc)[0-9]+</maven.version.ignore>
     <minimalJavaBuildVersion>11</minimalJavaBuildVersion>
-    <minimalMavenBuildVersion>3.5.0</minimalMavenBuildVersion>
+    <minimalMavenBuildVersion>3.6.0</minimalMavenBuildVersion>
     <project.build.outputTimestamp>2021-08-03T00:00:00Z</project.build.outputTimestamp>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <slf4j.version>2.0.9</slf4j.version>
-    <surefire.version>3.0.0-M6</surefire.version>
+    <!-- plugin and dependency versions -->
+    <version.checkstyle>10.12.4</version.checkstyle>
+    <version.dropwizard>4.2.21</version.dropwizard>
+    <version.jackson>2.15.3</version.jackson>
+    <version.jetty>9.4.53.v20231009</version.jetty>
+    <version.junit>4.13.2</version.junit>
+    <version.maven-fluido-skin>1.12.0</version.maven-fluido-skin>
+    <version.slf4j>2.0.9</version.slf4j>
+    <version.snappy>1.1.10.5</version.snappy>
+    <version.zookeeper>3.9.1</version.zookeeper>
   </properties>
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>com.fasterxml.jackson</groupId>
         <artifactId>jackson-bom</artifactId>
-        <version>2.15.2</version>
+        <version>${version.jackson}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-bom</artifactId>
-        <version>9.4.52.v20230823</version>
+        <version>${version.jetty}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>io.dropwizard.metrics</groupId>
         <artifactId>metrics-core</artifactId>
-        <version>4.2.20</version>
+        <version>${version.dropwizard}</version>
         <exclusions>
           <exclusion>
             <groupId>org.slf4j</groupId>
@@ -119,29 +127,29 @@
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.13.2</version>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-artifact</artifactId>
+        <version>${version.maven-plugin-tools}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-core</artifactId>
-        <version>${maven.tools-version}</version>
+        <version>${version.maven-plugin-tools}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-plugin-api</artifactId>
-        <version>${maven.tools-version}</version>
+        <version>${version.maven-plugin-tools}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.plugin-tools</groupId>
         <artifactId>maven-plugin-annotations</artifactId>
-        <version>3.8.2</version>
+        <version>${version.maven-plugin-tools}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.zookeeper</groupId>
         <artifactId>zookeeper</artifactId>
-        <version>3.8.1</version>
+        <version>${version.zookeeper}</version>
         <exclusions>
           <exclusion>
             <groupId>ch.qos.logback</groupId>
@@ -150,24 +158,19 @@
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-utils</artifactId>
-        <version>3.5.1</version>
-      </dependency>
-      <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
-        <version>${slf4j.version}</version>
+        <version>${version.slf4j}</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-simple</artifactId>
-        <version>${slf4j.version}</version>
+        <version>${version.slf4j}</version>
       </dependency>
       <dependency>
         <groupId>org.xerial.snappy</groupId>
         <artifactId>snappy-java</artifactId>
-        <version>1.1.10.5</version>
+        <version>${version.snappy}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -177,12 +180,13 @@
       <artifactId>zookeeper</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-utils</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-artifact</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -229,11 +233,6 @@
       <artifactId>snappy-java</artifactId>
       <scope>runtime</scope>
     </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
   <build>
     <pluginManagement>
@@ -251,7 +250,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
-          <version>3.2.2</version>
+          <version>3.3.0</version>
         </plugin>
         <plugin>
           <groupId>com.github.spotbugs</groupId>
@@ -308,7 +307,6 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.11.0</version>
           <configuration>
             <showDeprecation>true</showDeprecation>
             <showWarnings>true</showWarnings>
@@ -323,7 +321,6 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.5.0</version>
           <configuration>
             <quiet>true</quiet>
             <doclint>all,-missing</doclint>
@@ -332,7 +329,6 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
-          <version>3.0.0</version>
           <configuration>
             <useReleaseProfile>false</useReleaseProfile>
             <pushChanges>false</pushChanges>
@@ -342,19 +338,34 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>4.0.0-M7</version>
           <dependencies>
             <!-- Fluido is listed here for version update checking only -->
             <dependency>
               <groupId>org.apache.maven.skins</groupId>
               <artifactId>maven-fluido-skin</artifactId>
-              <version>2.0.0-M6</version>
+              <version>${version.maven-fluido-skin}</version>
             </dependency>
           </dependencies>
         </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>analyze</id>
+            <goals>
+              <goal>analyze-only</goal>
+            </goals>
+            <configuration>
+              <failOnWarning>true</failOnWarning>
+              <ignoreUnusedRuntime>true</ignoreUnusedRuntime>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>com.github.ekryd.sortpom</groupId>
         <artifactId>sortpom-maven-plugin</artifactId>
@@ -393,19 +404,6 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-failsafe-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>run-integration-tests</id>
-            <goals>
-              <goal>integration-test</goal>
-              <goal>verify</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
         <executions>
@@ -435,7 +433,7 @@
           <dependency>
             <groupId>com.puppycrawl.tools</groupId>
             <artifactId>checkstyle</artifactId>
-            <version>10.12.3</version>
+            <version>${version.checkstyle}</version>
           </dependency>
         </dependencies>
         <executions>
@@ -506,13 +504,13 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-plugin-plugin</artifactId>
-        <version>3.8.2</version>
+        <artifactId>maven-plugin-report-plugin</artifactId>
+        <version>${version.maven-plugin-tools}</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>3.4.3</version>
+        <version>${version.maven-project-info-reports-plugin}</version>
       </plugin>
     </plugins>
   </reporting>

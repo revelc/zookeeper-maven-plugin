@@ -33,7 +33,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooKeeper;
-import org.codehaus.plexus.util.FileUtils;
 
 /**
  * Starts a service which runs the ZooKeeper server.
@@ -223,12 +222,7 @@ public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
     }
     baseDir = new File(zmpDir, clientPortAddress + "_" + clientPort);
     if (!keepPreviousState) {
-      try {
-        FileUtils.deleteDirectory(baseDir);
-      } catch (IOException e) {
-        throw new MojoExecutionException(
-            "Can't clean " + "plugin directory: " + baseDir.getAbsolutePath());
-      }
+      deleteDirectory(baseDir, "plugin");
     }
     if (!baseDir.mkdirs() && !baseDir.isDirectory()) {
       throw new MojoExecutionException(
@@ -236,12 +230,7 @@ public class StartZooKeeperMojo extends AbstractZooKeeperMojo {
     }
     dataDir = new File(baseDir, "data");
     if (!keepPreviousState) {
-      try {
-        FileUtils.deleteDirectory(dataDir);
-      } catch (IOException e) {
-        throw new MojoExecutionException(
-            "Can't clean data directory: " + baseDir.getAbsolutePath());
-      }
+      deleteDirectory(dataDir, "data");
     }
   }
 
