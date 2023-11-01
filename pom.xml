@@ -92,7 +92,7 @@
     <version.checkstyle>10.12.4</version.checkstyle>
     <version.dropwizard>4.2.21</version.dropwizard>
     <version.jackson>2.15.3</version.jackson>
-    <version.jetty>9.4.53.v20231009</version.jetty>
+    <version.jetty>12.0.3</version.jetty>
     <version.junit>4.13.2</version.junit>
     <version.maven-fluido-skin>1.12.0</version.maven-fluido-skin>
     <version.slf4j>2.0.9</version.slf4j>
