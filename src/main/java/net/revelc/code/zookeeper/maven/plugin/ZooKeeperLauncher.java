@@ -94,7 +94,7 @@ public class ZooKeeperLauncher {
         }
       };
 
-  private static class RunServer extends ZooKeeperServerMain implements Runnable {
+  private static final class RunServer extends ZooKeeperServerMain implements Runnable {
 
     private final ServerConfig config;
 
