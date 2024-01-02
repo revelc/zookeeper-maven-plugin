@@ -91,7 +91,7 @@
     <!-- plugin and dependency versions -->
     <version.checkstyle>10.12.7</version.checkstyle>
     <version.dropwizard>4.2.23</version.dropwizard>
-    <version.jackson>2.16.0</version.jackson>
+    <version.jackson>2.16.1</version.jackson>
     <version.jetty>9.4.53.v20231009</version.jetty>
     <version.junit>4.13.2</version.junit>
     <version.maven-fluido-skin>1.12.0</version.maven-fluido-skin>
