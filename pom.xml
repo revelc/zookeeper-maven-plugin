@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
+        https://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.apache</groupId>
-    <artifactId>apache</artifactId>
-    <version>31</version>
+    <groupId>net.revelc.code</groupId>
+    <artifactId>revelc</artifactId>
+    <version>4</version>
   </parent>
   <groupId>net.revelc.code</groupId>
   <artifactId>zookeeper-maven-plugin</artifactId>
@@ -26,77 +28,27 @@
   <name>ZooKeeper Maven Plugin</name>
   <description>A Maven plugin for launching a ZooKeeper server for integration testing</description>
   <url>https://code.revelc.net/zookeeper-maven-plugin</url>
-  <organization>
-    <name>Revelc</name>
-    <url>https://github.com/revelc</url>
-  </organization>
-  <licenses>
-    <license>
-      <name>Apache License, Version 2.0</name>
-      <url>https://www.apache.org/licenses/LICENSE-2.0</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
   <developers>
     <developer>
       <name>Christopher Tubbs</name>
     </developer>
   </developers>
-  <mailingLists>
-    <mailingList />
-  </mailingLists>
   <prerequisites>
-    <maven>${minimalMavenBuildVersion}</maven>
+    <maven>3.6.3</maven>
   </prerequisites>
   <scm>
-    <connection>scm:git:https://github.com/revelc/zookeeper-maven-plugin.git</connection>
-    <developerConnection>scm:git:git@github.com:revelc/zookeeper-maven-plugin.git</developerConnection>
     <tag>HEAD</tag>
-    <url>https://github.com/revelc/zookeeper-maven-plugin</url>
   </scm>
-  <issueManagement>
-    <system>GitHub</system>
-    <url>https://github.com/revelc/zookeeper-maven-plugin/issues</url>
-  </issueManagement>
-  <ciManagement>
-    <system>GitHub</system>
-    <url>https://github.com/revelc/zookeeper-maven-plugin/actions</url>
-  </ciManagement>
-  <distributionManagement>
-    <!-- https://issues.sonatype.org/browse/OSSRH-15142 -->
-    <repository>
-      <id>oss.releases.https</id>
-      <name>Sonatype Release Distribution Staging Repository</name>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-    </repository>
-    <snapshotRepository>
-      <id>oss.snapshots.https</id>
-      <name>Sonatype Snapshot Distribution Repository</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-  </distributionManagement>
   <properties>
-    <maven.compiler.release>8</maven.compiler.release>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <!-- skip standard site deployment, because site is deployed using github plugin instead -->
-    <maven.site.deploy.skip>true</maven.site.deploy.skip>
-    <!-- versions-maven-plugin ignore patterns for snapshots, alpha, beta, milestones, and release candidates -->
-    <maven.version.ignore>.+-SNAPSHOT,(?i).*(alpha|beta)[0-9.-]*,(?i).*[.-](m|rc)[0-9]+</maven.version.ignore>
-    <minimalJavaBuildVersion>11</minimalJavaBuildVersion>
-    <minimalMavenBuildVersion>3.6.0</minimalMavenBuildVersion>
+    <formatter.configFile>src/tools/modified-google-style.xml</formatter.configFile>
+    <maven.compiler.release>11</maven.compiler.release>
     <project.build.outputTimestamp>2021-08-03T00:00:00Z</project.build.outputTimestamp>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <!-- plugin and dependency versions -->
     <version.checkstyle>10.12.7</version.checkstyle>
     <version.dropwizard>4.2.23</version.dropwizard>
     <version.jackson>2.16.1</version.jackson>
     <version.jetty>9.4.53.v20231009</version.jetty>
-    <version.junit>4.13.2</version.junit>
-    <version.maven-fluido-skin>1.12.0</version.maven-fluido-skin>
-    <version.maven-provided-tools>3.9.6</version.maven-provided-tools>
-    <version.slf4j>2.0.10</version.slf4j>
+    <version.slf4j>2.0.11</version.slf4j>
     <version.snappy>1.1.10.5</version.snappy>
     <version.zookeeper>3.9.1</version.zookeeper>
   </properties>
@@ -126,26 +78,6 @@
             <artifactId>slf4j-api</artifactId>
           </exclusion>
         </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-artifact</artifactId>
-        <version>${version.maven-provided-tools}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-core</artifactId>
-        <version>${version.maven-provided-tools}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-plugin-api</artifactId>
-        <version>${version.maven-provided-tools}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven.plugin-tools</groupId>
-        <artifactId>maven-plugin-annotations</artifactId>
-        <version>${version.maven-plugin-tools}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.zookeeper</groupId>
@@ -239,201 +171,15 @@
     <pluginManagement>
       <plugins>
         <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>versions-maven-plugin</artifactId>
-          <version>2.16.2</version>
-        </plugin>
-        <plugin>
-          <groupId>com.github.github</groupId>
-          <artifactId>site-maven-plugin</artifactId>
-          <version>0.12</version>
-        </plugin>
-        <plugin>
           <groupId>com.github.spotbugs</groupId>
           <artifactId>spotbugs-maven-plugin</artifactId>
-          <version>4.8.2.0</version>
           <configuration>
-            <effort>Max</effort>
             <excludeFilterFile>src/main/spotbugs/exclude-filter.xml</excludeFilterFile>
-            <failOnError>true</failOnError>
-            <includeTests>true</includeTests>
-            <maxRank>20</maxRank>
-            <xmlOutput>true</xmlOutput>
           </configuration>
-        </plugin>
-        <plugin>
-          <groupId>com.github.ekryd.sortpom</groupId>
-          <artifactId>sortpom-maven-plugin</artifactId>
-          <version>3.3.0</version>
-          <configuration>
-            <createBackupFile>false</createBackupFile>
-            <expandEmptyElements>false</expandEmptyElements>
-            <keepBlankLines>false</keepBlankLines>
-            <lineSeparator>\n</lineSeparator>
-            <nrOfIndentSpace>2</nrOfIndentSpace>
-            <predefinedSortOrder>recommended_2008_06</predefinedSortOrder>
-            <sortDependencies>scope,groupId,artifactId</sortDependencies>
-            <sortProperties>true</sortProperties>
-            <spaceBeforeCloseEmptyElement>true</spaceBeforeCloseEmptyElement>
-            <verifyFail>Stop</verifyFail>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>net.revelc.code.formatter</groupId>
-          <artifactId>formatter-maven-plugin</artifactId>
-          <version>2.23.0</version>
-          <configuration>
-            <lineEnding>LF</lineEnding>
-            <skipJsFormatting>true</skipJsFormatting>
-            <skipHtmlFormatting>true</skipHtmlFormatting>
-            <skipXmlFormatting>true</skipXmlFormatting>
-            <skipJsonFormatting>true</skipJsonFormatting>
-            <skipCssFormatting>true</skipCssFormatting>
-            <configFile>src/tools/modified-google-style.xml</configFile>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>net.revelc.code</groupId>
-          <artifactId>impsort-maven-plugin</artifactId>
-          <version>1.9.0</version>
-          <configuration>
-            <removeUnused>true</removeUnused>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <configuration>
-            <showDeprecation>true</showDeprecation>
-            <showWarnings>true</showWarnings>
-            <compilerArgs>
-              <arg>-Xlint:all</arg>
-              <arg>-Xlint:-processing</arg>
-              <arg>-Xmaxwarns</arg>
-              <arg>5</arg>
-            </compilerArgs>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-javadoc-plugin</artifactId>
-          <configuration>
-            <quiet>true</quiet>
-            <doclint>all,-missing</doclint>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-release-plugin</artifactId>
-          <configuration>
-            <useReleaseProfile>false</useReleaseProfile>
-            <pushChanges>false</pushChanges>
-            <localCheckout>true</localCheckout>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-site-plugin</artifactId>
-          <dependencies>
-            <!-- Fluido is listed here for version update checking only -->
-            <dependency>
-              <groupId>org.apache.maven.skins</groupId>
-              <artifactId>maven-fluido-skin</artifactId>
-              <version>${version.maven-fluido-skin}</version>
-            </dependency>
-          </dependencies>
         </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>analyze</id>
-            <goals>
-              <goal>analyze-only</goal>
-            </goals>
-            <configuration>
-              <failOnWarning>true</failOnWarning>
-              <ignoreUnusedRuntime>true</ignoreUnusedRuntime>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-plugin-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>default-descriptor</id>
-            <goals>
-              <goal>descriptor</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>help-goal</id>
-            <goals>
-              <goal>helpmojo</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>com.github.ekryd.sortpom</groupId>
-        <artifactId>sortpom-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>sort-pom</id>
-            <goals>
-              <goal>sort</goal>
-            </goals>
-            <phase>validate</phase>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>net.revelc.code.formatter</groupId>
-        <artifactId>formatter-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>format-java-source</id>
-            <goals>
-              <goal>format</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>net.revelc.code</groupId>
-        <artifactId>impsort-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>sort-imports</id>
-            <goals>
-              <goal>sort</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.rat</groupId>
-        <artifactId>apache-rat-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>check-licenses</id>
-            <goals>
-              <goal>check</goal>
-            </goals>
-            <configuration>
-              <excludes>
-                <exclude>src/site/resources/CNAME</exclude>
-              </excludes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
@@ -472,102 +218,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>com.github.github</groupId>
-        <artifactId>site-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>site</goal>
-            </goals>
-            <phase>site-deploy</phase>
-            <configuration>
-              <server>github</server>
-              <message>Creating site for ${project.version}</message>
-              <noJekyll>true</noJekyll>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-invoker-plugin</artifactId>
-        <configuration>
-          <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
-          <pomIncludes>
-            <pomInclude>*/pom.xml</pomInclude>
-          </pomIncludes>
-          <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
-          <settingsFile>src/it/settings.xml</settingsFile>
-          <goals>
-            <goal>verify</goal>
-          </goals>
-        </configuration>
-        <executions>
-          <execution>
-            <id>integration-test</id>
-            <goals>
-              <goal>install</goal>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
   </build>
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-plugin-report-plugin</artifactId>
-        <version>${version.maven-plugin-tools}</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>${version.maven-project-info-reports-plugin}</version>
-      </plugin>
-    </plugins>
-  </reporting>
-  <profiles>
-    <profile>
-      <id>eclipse</id>
-      <activation>
-        <property>
-          <name>m2e.version</name>
-        </property>
-      </activation>
-      <build>
-        <pluginManagement>
-          <plugins>
-            <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-            <plugin>
-              <groupId>org.eclipse.m2e</groupId>
-              <artifactId>lifecycle-mapping</artifactId>
-              <version>1.0.0</version>
-              <configuration>
-                <lifecycleMappingMetadata>
-                  <pluginExecutions>
-                    <pluginExecution>
-                      <pluginExecutionFilter>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-invoker-plugin</artifactId>
-                        <versionRange>[0,)</versionRange>
-                        <goals>
-                          <goal>install</goal>
-                        </goals>
-                      </pluginExecutionFilter>
-                      <action>
-                        <ignore />
-                      </action>
-                    </pluginExecution>
-                  </pluginExecutions>
-                </lifecycleMappingMetadata>
-              </configuration>
-            </plugin>
-          </plugins>
-        </pluginManagement>
-      </build>
-    </profile>
-  </profiles>
 </project>
