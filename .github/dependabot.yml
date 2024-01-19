@@ -8,6 +8,10 @@ updates:
     maven:
       patterns:
         - "*"
+  ignore:
+    # ignore transitive dependencies updated with src/build/find-transitive-eclipse-updates.sh
+    - dependency-name: "org.eclipse.jetty:jetty-bom"
+      update-types: ["version-update:semver-major"]
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
