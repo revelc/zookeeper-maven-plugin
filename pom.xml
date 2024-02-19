@@ -47,7 +47,7 @@
     <version.checkstyle>10.13.0</version.checkstyle>
     <version.dropwizard>4.2.25</version.dropwizard>
     <version.jackson>2.16.1</version.jackson>
-    <version.jetty>9.4.53.v20231009</version.jetty>
+    <version.jetty>9.4.54.v20240208</version.jetty>
     <version.slf4j>2.0.12</version.slf4j>
     <version.snappy>1.1.10.5</version.snappy>
     <version.zookeeper>3.9.1</version.zookeeper>
