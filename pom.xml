@@ -50,7 +50,7 @@
     <version.jetty>9.4.53.v20231009</version.jetty>
     <version.slf4j>2.0.12</version.slf4j>
     <version.snappy>1.1.10.5</version.snappy>
-    <version.zookeeper>3.9.1</version.zookeeper>
+    <version.zookeeper>3.9.2</version.zookeeper>
   </properties>
   <dependencyManagement>
     <dependencies>
