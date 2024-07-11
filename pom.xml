@@ -19,7 +19,7 @@
   <parent>
     <groupId>net.revelc.code</groupId>
     <artifactId>revelc</artifactId>
-    <version>5</version>
+    <version>6</version>
   </parent>
   <groupId>net.revelc.code</groupId>
   <artifactId>zookeeper-maven-plugin</artifactId>
@@ -37,7 +37,10 @@
     <maven>3.6.3</maven>
   </prerequisites>
   <scm>
+    <connection>scm:git:https://github.com/revelc/${github.site.repositoryName}.git</connection>
+    <developerConnection>scm:git:git@github.com:revelc/${github.site.repositoryName}.git</developerConnection>
     <tag>HEAD</tag>
+    <url>https://github.com/revelc/${github.site.repositoryName}</url>
   </scm>
   <properties>
     <formatter.configFile>src/tools/modified-google-style.xml</formatter.configFile>
