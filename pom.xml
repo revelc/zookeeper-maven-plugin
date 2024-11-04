@@ -47,13 +47,13 @@
     <maven.compiler.release>11</maven.compiler.release>
     <project.build.outputTimestamp>2021-08-03T00:00:00Z</project.build.outputTimestamp>
     <!-- plugin and dependency versions -->
-    <version.checkstyle>10.18.1</version.checkstyle>
-    <version.dropwizard>4.2.27</version.dropwizard>
-    <version.jackson>2.17.2</version.jackson>
+    <version.checkstyle>10.20.0</version.checkstyle>
+    <version.dropwizard>4.2.28</version.dropwizard>
+    <version.jackson>2.18.1</version.jackson>
     <version.jetty>9.4.56.v20240826</version.jetty>
     <version.slf4j>2.0.16</version.slf4j>
     <version.snappy>1.1.10.7</version.snappy>
-    <version.zookeeper>3.9.2</version.zookeeper>
+    <version.zookeeper>3.9.3</version.zookeeper>
   </properties>
   <dependencyManagement>
     <dependencies>
