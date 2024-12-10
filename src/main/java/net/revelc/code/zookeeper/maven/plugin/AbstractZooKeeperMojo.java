@@ -100,6 +100,9 @@ public abstract class AbstractZooKeeperMojo extends AbstractMojo {
     runMojo();
   }
 
+  /**
+   * Run the configured mojo.
+   */
   protected abstract void runMojo() throws MojoFailureException, MojoExecutionException;
 
   // visible for testing

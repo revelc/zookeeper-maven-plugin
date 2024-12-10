@@ -127,6 +127,9 @@ public final class ZooKeeperLauncher {
     }
   }
 
+  /**
+   * Launch ZooKeeper with the provided arguments.
+   */
   public ZooKeeperLauncher(String[] args) {
     parseArgs(args);
   }
