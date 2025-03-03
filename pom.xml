@@ -49,9 +49,9 @@
     <!-- plugin and dependency versions -->
     <version.checkstyle>10.21.3</version.checkstyle>
     <version.dropwizard>4.2.30</version.dropwizard>
-    <version.jackson>2.18.2</version.jackson>
+    <version.jackson>2.18.3</version.jackson>
     <version.jetty>9.4.57.v20241219</version.jetty>
-    <version.slf4j>2.0.16</version.slf4j>
+    <version.slf4j>2.0.17</version.slf4j>
     <version.snappy>1.1.10.7</version.snappy>
     <version.zookeeper>3.9.3</version.zookeeper>
   </properties>
