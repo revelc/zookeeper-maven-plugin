@@ -16,26 +16,28 @@
 
 #set ($d = "$")
 
-Description
------------
+${project.name}
+===============
 
-  This `zookeeper-maven-plugin` enables integration testing for applications
-  utilizing ZooKeeper servers. It will enable you to start a ZooKeeper server
-  prior to running integration tests, and then enable you to shut it down
-  gracefully. This plugin was inspired by the [jetty-maven-plugin][2] and
-  behaves similarly, using a `shutdownString` and `shutdownPort` to shut down a
-  specific instance during different phases of a [Maven build lifecycle][1].
+${project.description}
 
-  Configuration options are available for many of ZooKeeper's own configuration
-  options. It uses the `${d}{project.build.directory}/zmp` to store its running
-  state, including the ZooKeeper `dataDir`. Multiple concurrent executions are
-  possible, but must each must specify a unique `clientPort` and `shutdownPort`
-  option.
+This `${project.artifactId}` enables integration testing for applications
+utilizing ZooKeeper servers. It will enable you to start a ZooKeeper server
+prior to running integration tests, and then enable you to shut it down
+gracefully. This plugin was inspired by the [jetty-maven-plugin][2] and
+behaves similarly, using a `shutdownString` and `shutdownPort` to shut down a
+specific instance during different phases of a [Maven build lifecycle][1].
+
+Configuration options are available for many of ZooKeeper's own configuration
+options. It uses the `${d}{project.build.directory}/zmp` to store its running
+state, including the ZooKeeper `dataDir`. Multiple concurrent executions are
+possible, but must each must specify a unique `clientPort` and `shutdownPort`
+option.
 
 Getting Started
 ---------------
 
-  To add this plugin to your project, configure the plugin similarly to:
+To add this plugin to your project, configure the plugin similarly to:
 
 ```xml
   <build>
@@ -84,8 +86,8 @@ Getting Started
   </build>
 ```
 
-  and build your project, similarly to (it runs at the verify phase by
-  default):
+and build your project, similarly to (it runs at the [verify][1] phase by
+default):
 
 ```
 mvn verify
@@ -93,32 +95,31 @@ mvn verify
 
 Retaining ZooKeeper's Data/State
 -----------
-  By default, `zookeeper-maven-plugin` will create a `zmp` directory under your
-  project's `${d}{project.build.directory}`. This directory is typically
-  cleared and its children recreated with each new build. You can change the
-  `zmp` directory providing the following configuration:
-  ```
-  <zmpDir>/path/to/different/zmp</zmpDir>
-  ```
 
-  Now, future builds will create use that location, creating it if it doesn't
-  exist.
+By default, `zookeeper-maven-plugin` will create a `zmp` directory under your
+project's `${d}{project.build.directory}`. This directory is typically
+cleared and its children recreated with each new build. You can change the
+`zmp` directory providing the following configuration:
+```
+<zmpDir>/path/to/different/zmp</zmpDir>
+```
 
-  You can take it a step further and add the following to keep data between
-  builds.
+Now, future builds will create use that location, creating it if it doesn't
+exist.
 
-  ```
-  <keepPreviousState>true</keepPreviousState>
-  ```
+You can take it a step further and add the following to keep data between
+builds.
 
-  Both configurations must be present if you wish to keep data between builds.
-  The boolean ensures the plugin itself doesn't delete the directory, and using
-  a different directory than the default ensures it is safe from `mvn clean`
-  (assuming the directory you've chosen is outside your
-  `${d}{project.build.directory}` and you don't have any special `clean` tasks
-  configured).
+```
+<keepPreviousState>true</keepPreviousState>
+```
 
-
+Both configurations must be present if you wish to keep data between builds.
+The boolean ensures the plugin itself doesn't delete the directory, and using
+a different directory than the default ensures it is safe from `mvn clean`
+(assuming the directory you've chosen is outside your
+`${d}{project.build.directory}` and you don't have any special `clean` tasks
+configured).
 
 [1]: https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
 [2]: http://eclipse.org/jetty/documentation/current/jetty-maven-plugin.html
