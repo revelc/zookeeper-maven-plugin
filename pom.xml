@@ -19,7 +19,7 @@
   <parent>
     <groupId>net.revelc.code</groupId>
     <artifactId>revelc</artifactId>
-    <version>8</version>
+    <version>9</version>
   </parent>
   <groupId>net.revelc.code</groupId>
   <artifactId>zookeeper-maven-plugin</artifactId>
@@ -47,12 +47,12 @@
     <maven.compiler.release>11</maven.compiler.release>
     <project.build.outputTimestamp>2021-08-03T00:00:00Z</project.build.outputTimestamp>
     <!-- plugin and dependency versions -->
-    <version.checkstyle>10.25.1</version.checkstyle>
+    <version.checkstyle>10.26.1</version.checkstyle>
     <version.dropwizard>4.2.33</version.dropwizard>
-    <version.jackson>2.19.1</version.jackson>
+    <version.jackson>2.19.2</version.jackson>
     <version.jetty>9.4.57.v20241219</version.jetty>
     <version.slf4j>2.0.17</version.slf4j>
-    <version.snappy>1.1.10.7</version.snappy>
+    <version.snappy>1.1.10.8</version.snappy>
     <version.zookeeper>3.9.3</version.zookeeper>
   </properties>
   <dependencyManagement>
