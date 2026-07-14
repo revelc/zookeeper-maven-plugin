@@ -46,6 +46,7 @@
     <formatter.configFile>src/tools/modified-google-style.xml</formatter.configFile>
     <maven.compiler.release>11</maven.compiler.release>
     <project.build.outputTimestamp>2021-08-03T00:00:00Z</project.build.outputTimestamp>
+    <revelc.min-build-jdk>21</revelc.min-build-jdk>
     <!-- plugin and dependency versions -->
     <version.checkstyle>13.4.2</version.checkstyle>
     <version.dropwizard>4.2.38</version.dropwizard>
