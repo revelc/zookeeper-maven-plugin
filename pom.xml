@@ -48,9 +48,9 @@
     <project.build.outputTimestamp>2021-08-03T00:00:00Z</project.build.outputTimestamp>
     <revelc.min-build-jdk>21</revelc.min-build-jdk>
     <!-- plugin and dependency versions -->
-    <version.checkstyle>13.4.2</version.checkstyle>
-    <version.dropwizard>4.2.38</version.dropwizard>
-    <version.jackson>2.21.3</version.jackson>
+    <version.checkstyle>13.8.0</version.checkstyle>
+    <version.dropwizard>4.2.39</version.dropwizard>
+    <version.jackson>2.22.1</version.jackson>
     <version.jetty>9.4.58.v20250814</version.jetty>
     <version.slf4j>2.0.18</version.slf4j>
     <version.snappy>1.1.10.8</version.snappy>
